@@ -1,0 +1,41 @@
+﻿using DirWatcher.Data;
+using DirWatcher.Models;
+
+namespace DirWatcher.Services.WatcherManagementService
+{
+    public class WatcherService : IWatcherService
+    {
+        private readonly ILogger<WatcherService> _logger;
+        private readonly IDirWatcherBgService _dirWatcherBgService;
+        private readonly IDirWatcherRepository _dirWatcherRepository;
+
+        public WatcherService(
+            ILogger<WatcherService> logger,
+            IDirWatcherBgService dirWatcherBgService,
+            IDirWatcherRepository dirWatcherRepository)
+        {
+            _logger = logger;
+            _dirWatcherBgService = dirWatcherBgService;
+            _dirWatcherRepository = dirWatcherRepository;
+        }
+
+        public async Task<TaskDetail> GetTaskDetailsAsync()
+        {
+            return await _dirWatcherBgService.GetTaskDetailsAsync();
+        }
+
+        public async Task UpdateConfig(BgConfig updatedBgConfig)
+        {
+            try
+            {
+                await _dirWatcherRepository.ModifyBgConfigAsync(updatedBgConfig);
+
+                await _dirWatcherBgService.UpdateConfig(updatedBgConfig);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error occured : {ex.Message}");
+            }
+        }
+    }
+}

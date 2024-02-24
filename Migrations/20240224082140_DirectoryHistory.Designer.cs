@@ -2,6 +2,7 @@
 using DirWatcher.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DirWatcher.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240224082140_DirectoryHistory")]
+    partial class DirectoryHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -23,19 +26,34 @@ namespace DirWatcher.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Directory")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Interval")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("MagicString")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("BgConfiguration");
+                });
+
+            modelBuilder.Entity("DirWatcher.Models.DirHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DirectoryHistory");
                 });
 #pragma warning restore 612, 618
         }

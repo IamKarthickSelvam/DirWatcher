@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirWatcher", "DirWatcher.csproj", "{23081203-D188-47E5-B781-CD3B493DBEF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirWatcher", "DirWatcher.csproj", "{C087E99A-2BF1-407D-B786-B388A191674F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23081203-D188-47E5-B781-CD3B493DBEF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23081203-D188-47E5-B781-CD3B493DBEF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23081203-D188-47E5-B781-CD3B493DBEF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23081203-D188-47E5-B781-CD3B493DBEF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C087E99A-2BF1-407D-B786-B388A191674F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C087E99A-2BF1-407D-B786-B388A191674F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C087E99A-2BF1-407D-B786-B388A191674F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C087E99A-2BF1-407D-B786-B388A191674F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {12B2C9E5-C6FC-4E33-A5BB-0AB9B1160E90}
+		SolutionGuid = {BAE60F73-0BC2-49A9-B0B2-754F535CC1BA}
 	EndGlobalSection
 EndGlobal
