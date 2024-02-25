@@ -102,6 +102,11 @@ namespace DirWatcher.Controllers
         {
             try
             {
+                if (!_watcherService.ValidateDirectory(bgConfigDto.Directory))
+                {
+                    return StatusCode(400, "Invalid directory, please enter a valid directory string");
+                }
+
                 var updatedBgConfig = _mapper.Map<BgConfig>(bgConfigDto);
                 updatedBgConfig.Id = 1;
                 await _watcherService.UpdateConfig(updatedBgConfig);

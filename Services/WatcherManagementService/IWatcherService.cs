@@ -9,5 +9,7 @@ namespace DirWatcher.Services.WatcherManagementService
         Task UpdateConfig(BgConfig updatedBgConfig);
 
         Task AddTask(TaskDetail newTask);
+
+        bool ValidateDirectory(string directoryPath);
     }
 }

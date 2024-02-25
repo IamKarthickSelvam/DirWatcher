@@ -29,13 +29,18 @@ namespace DirWatcher.Services.WatcherManagementService
             await _dirWatcherRepository.ModifyBgConfigAsync(updatedBgConfig);
             await _dirWatcherRepository.SaveChangesAsync();
 
-            await _dirWatcherBgService.UpdateConfig(updatedBgConfig);
+            _dirWatcherBgService.UpdateConfig(updatedBgConfig);
         }
 
         public async Task AddTask(TaskDetail newTask)
         {
             newTask.TaskNo = (await _dirWatcherRepository.GetAsync()).Count + 1;
             await _dirWatcherRepository.CreateAsync(newTask);
+        }
+
+        public bool ValidateDirectory(string directoryPath)
+        {
+            return Directory.Exists(directoryPath);
         }
     }
 }

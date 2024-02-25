@@ -1,5 +1,6 @@
 
 using DirWatcher.Data;
+using DirWatcher.Middlewares;
 using DirWatcher.Models;
 using DirWatcher.Services;
 using DirWatcher.Services.WatcherManagementService;
@@ -21,7 +22,6 @@ namespace DirWatcher
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //builder.Services.AddScoped<WatcherService>();
             builder.Services.AddScoped<IDirWatcherRepository, DirWatcherRepository>();
             builder.Services.AddScoped<IWatcherService, WatcherService>();
             builder.Services.AddSingleton<IDirWatcherBgService, DirWatcherBgService>();
@@ -29,11 +29,12 @@ namespace DirWatcher
             builder.Services.AddScoped<WatcherService>();
             builder.Services.AddSingleton<DirWatcherBgService>();
             builder.Services.AddHostedService<DirWatcherBgService>();
-            //builder.Services.AddHostedService(provider => provider.GetRequiredService<DirWatcherBgService>());
 
             builder.Services.AddDbContext<AppDbContext>(opt =>
                 opt.UseSqlite(builder.Configuration.GetConnectionString("DirWatcherSqlite")));
             builder.Services.Configure<TaskDatabaseSettings>(builder.Configuration.GetSection("TaskDatabase"));
+
+            builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
 
             var app = builder.Build();
 
@@ -49,6 +50,8 @@ namespace DirWatcher
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             Console.WriteLine("--> Prepping DB...");
             PrepDb.PrepPopulation(app);
