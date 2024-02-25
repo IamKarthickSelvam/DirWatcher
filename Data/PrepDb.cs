@@ -15,7 +15,7 @@
                 Console.WriteLine("--> Seeding Data...");
                 context.BgConfiguration.Add(new Models.BgConfig() 
                 {
-                    Directory = "C:\\Stuff\\Coding\\TestDirWatcher\\DirWatcher\\TestDirectory", 
+                    Directory = "C:\\Stuff\\Coding\\DirWatcher\\TestDirectory", 
                     Interval = 10, 
                     MagicString = "awan"
                 });

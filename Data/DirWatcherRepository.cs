@@ -27,7 +27,7 @@ namespace DirWatcher.Data
         {
             BgConfig bgConfig = await _context.BgConfiguration.FirstAsync() ?? throw new Exception("Configuration is missing in DB!");
 
-            _context.Entry(bgConfig).CurrentValues.SetValues(bgConfig);
+            _context.Entry(bgConfig).CurrentValues.SetValues(updatedBgConfig);
 
             return null;
         }

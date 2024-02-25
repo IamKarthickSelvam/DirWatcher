@@ -7,5 +7,7 @@ namespace DirWatcher.Services.WatcherManagementService
         Task<TaskDetail> GetTaskDetailsAsync();
 
         Task UpdateConfig(BgConfig updatedBgConfig);
+
+        Task AddTask(TaskDetail newTask);
     }
 }

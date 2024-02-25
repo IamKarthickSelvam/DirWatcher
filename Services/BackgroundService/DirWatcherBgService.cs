@@ -1,20 +1,25 @@
 ﻿
 using DirWatcher.Data;
 using DirWatcher.Models;
+using DirWatcher.Services.WatcherManagementService;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
 namespace DirWatcher.Services
 {
     public class DirWatcherBgService : BackgroundService, IDirWatcherBgService
     {
+        private Task? _executeTask;
+        private CancellationTokenSource? _stoppingCts;
+
         private int _executionCount = 0;
         private readonly ILogger<DirWatcherBgService> _logger;
         private readonly IServiceScopeFactory _factory;
-        private Task<BgConfig> _directoryConfig;
+        private static Task<BgConfig> _directoryConfig;
         private readonly TimeSpan _period = TimeSpan.FromSeconds(5);
         private readonly Stopwatch _stopwatch = new();
-        private DateTime _lastCheckTime;
-        private string[] _previousFiles;
+        private static DateTime _lastCheckTime;
+        private static string[] _previousFiles;
         private List<string> _addedFiles = [];
         private List<string> _deletedFiles = [];
         private int _newTaskId;
@@ -30,25 +35,48 @@ namespace DirWatcher.Services
             _factory = factory;
             _lastCheckTime = DateTime.MinValue;
 
-            Init();
+            if (IsEnabled)
+                _stopwatch.Start();
         }
 
         // Maybe use StartAsync
-        public async Task Init()
-        {
-            if (IsEnabled)
-                _stopwatch.Start();
+        //public async Task Init()
+        //{
+        //    if (IsEnabled)
+        //        _stopwatch.Start();
 
-            await CreateTaskAsync();
-        }
+        //    await CreateTaskAsync();
+        //}
+
+        //public override async Task<object> StartAsync(CancellationToken cancellationToken)
+        //{
+        //    if (IsEnabled)
+        //        _stopwatch.Start();
+
+
+        //    _stoppingCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        //    // Store the task we're executing
+        //    _executeTask = ExecuteAsync(_stoppingCts.Token);
+
+        //    // If the task is completed then return it, this will bubble cancellation and failure to the caller
+        //    if (_executeTask.IsCompleted)
+        //    {
+        //        return _executeTask;
+        //    }
+
+        //    // Otherwise it's running
+        //    return Task.CompletedTask;
+        //}
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {     
+        {
             using PeriodicTimer timer = new(_period);
             _logger.LogInformation($"Task has started");
 
             if (IsEnabled)
             {
+                await CreateTaskAsync();
                 while (
                 !stoppingToken.IsCancellationRequested &&
                 await timer.WaitForNextTickAsync(stoppingToken) &&
@@ -199,7 +227,6 @@ namespace DirWatcher.Services
             {
                 TaskNo = _newTaskId,
                 StartTime = DateTime.Now,
-                EndTime = DateTime.MinValue,
                 Status = "Inprogress",
             };
 

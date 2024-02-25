@@ -21,11 +21,15 @@ namespace DirWatcher
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            builder.Services.AddScoped<WatcherService>();
+            //builder.Services.AddScoped<WatcherService>();
             builder.Services.AddScoped<IDirWatcherRepository, DirWatcherRepository>();
             builder.Services.AddScoped<IWatcherService, WatcherService>();
             builder.Services.AddSingleton<IDirWatcherBgService, DirWatcherBgService>();
+            builder.Services.AddScoped<DirWatcherRepository>();
+            builder.Services.AddScoped<WatcherService>();
+            builder.Services.AddSingleton<DirWatcherBgService>();
             builder.Services.AddHostedService<DirWatcherBgService>();
+            //builder.Services.AddHostedService(provider => provider.GetRequiredService<DirWatcherBgService>());
 
             builder.Services.AddDbContext<AppDbContext>(opt =>
                 opt.UseSqlite(builder.Configuration.GetConnectionString("DirWatcherSqlite")));

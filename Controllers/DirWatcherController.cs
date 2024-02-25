@@ -103,7 +103,7 @@ namespace DirWatcher.Controllers
             try
             {
                 var updatedBgConfig = _mapper.Map<BgConfig>(bgConfigDto);
-
+                updatedBgConfig.Id = 1;
                 await _watcherService.UpdateConfig(updatedBgConfig);
 
                 return StatusCode(200, updatedBgConfig);
@@ -121,8 +121,9 @@ namespace DirWatcher.Controllers
             try
             {
                 var taskDetail = _mapper.Map<TaskDetail>(taskDetailDto);
-                await _dirWatcherRepository.CreateAsync(taskDetail);
-                return Ok(200);
+                await _watcherService.AddTask(taskDetail);
+
+                return StatusCode(200, taskDetail);
             }
             catch (Exception ex)
             {
