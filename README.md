@@ -7,15 +7,11 @@ Exposes endpoints to configure directory monitoring settings and retrieve task r
 ### 2. Long Running Background Task
 Monitors configured directories at scheduled intervals, tracks file changes, counts occurrences of a specified magic string, and persists results to the database.
 
-## Features
-### Directory Monitoring
-Monitors directories for file additions, deletions, and changes.
-### Magic String Detection
-Counts occurrences of a specified magic string within monitored files.
-### Dynamic Configuration
-Allows configuration of monitored directories, monitoring intervals, and magic strings via REST API calls.
-### Task Run Details
-Provides detailed information about task runs, including start time, end time, total runtime, files added, files deleted, total magic string occurrences, and task status.
+### Features
+**Directory Monitoring** - Monitors directories for file additions, deletions, and changes. \
+**Magic String Detection** - Counts occurrences of a specified magic string within monitored files. \
+**Dynamic Configuration** - Allows configuration of monitored directories, monitoring intervals, and magic strings via REST API calls. \
+**Task Run Details** - Provides detailed information about task runs, including start time, end time, total runtime, files added, files deleted, total magic string occurrences, and task status.
 
 ## Code Setup
 ### 1. Install Prerequisites
@@ -45,10 +41,10 @@ Provides detailed information about task runs, including start time, end time, t
   - Or Install [Visual Studio Code](https://code.visualstudio.com/)
 
 ### 2. Clone the repository
-Clone the repository in your local using the clone URL inside **<> Code** button above or simply use the below command - `git clone https://github.com/IamKarthickSelvam/DirWatcher.git`
+Clone the repository in your local using the clone URL inside **<> Code** button above or simply use the command - `git clone https://github.com/IamKarthickSelvam/DirWatcher.git`
 
 ### 3. Navigate to directory
-open terminal or cmd and run `cd DirWatcher` 
+Open Terminal or Command Promt and navigate to directory - `cd DirWatcher` 
 
 ### 4. Restore Dependencies
 Run `dotnet restore` command to install all nuget packages/dependencies
@@ -59,12 +55,22 @@ The existing connection string in appsettings.json is configured to allow any IP
 If you plan to your own DB, use the following command and provide your DB credentials - `mongodb+srv://<collectionname>:<password>@<clustername>.ystwcxh.mongodb.net/`
 - `<collectionname>` - Name of your collection, eg. TaskDatabase
 - `<password>` - Password configured during creation of cluster
-- `<clustername>` - Name of your cluster, eg. CourierTrackingCluster
+- `<clustername>` - Name of your cluster, eg. CourierTrackingCluster 
 
 ### 6. Build the Application
-That's all the setup, now build your application using `dotnet build`
+Now build your application using `dotnet build`
 
 ### 7. Run the Application
 Run the application using `dotnet run`
 
 ## API Endpoints
+| Routes                 | Method | Body                                                           | Sample Response                                            | Description                                                                                                                                                   |
+|------------------------|--------|----------------------------------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| /GetBgConfig           | GET    | -                                                              | `200 - Success` { "id": 1, "directory": "C:\\Stuff\\Coding\\DirWatcher\\TestDirectory", "interval": 5, "magicString": "awan" }           | Get the current configuration of the background task. i.e., Directory, Interval and Magic String                                                             |
+| /GetTaskDetails        | GET    | -                                                              | `200 - Success` { "id": null, "taskNo": 0, "startTime": "0001-01-01T00:00:00", "endTime": "0001-01-01T00:00:00", "totalRunTime": "00:00:00", "magicCount": 3, "status": "InProgress", "currentFiles": [ "boo.txt", "ENnadhu.txt", "Whatsapp.txt", "Wtas.txt" ], "addedFiles": [ "ABC.txt" ], "deletedFiles": [ "XYZ.txt" ] }                                                          | Get details of the task which is currently running                                                                                                            |
+| /CheckCurrentTaskState | GET    | -                                                              | `200 - Success` { "isEnabled": false }                                                           | Check if background tasks are enabled or disabled. If tasks are stopped or not                                                                                |
+| /ToggleCurrentTask     | PATCH  |{ "IsEnabled": boolean }                                        | `200 - Success` { "isEnabled": false }                                    | Start or Stop the current background task                                                                                                                     |
+| /ModifyConfig          | POST   |{ "Directory": "string", "Interval": int, "MagicString": "string" } | `200 - Success` { "Directory": "C:\\Stuff\\Coding\\DirWatcher\\TestDirectory", "Interval": 10, "MagicString": "abc" }                                           | Modify the current background task configuration to change task behaviour on the fly                                                                           |
+| /AddTask               | POST   |{ "taskNo": int, "startTime": "DateTime", "endTime": "DateTime", "status": "string", "totalRunTime": { "ticks": "seconds" }, "magicCount": int, "currentFiles": [ "string" ], "addedFiles": [ "string" ], "deletedFiles": [ "string" ] } | `201 - Created` { "taskNo": 55, "startTime": "2024-02-25T09:49:13.997Z", "endTime": "2024-02-26T09:49:13.997Z", "status": "In Progress", "totalRunTime": { "ticks": 10 }, "magicCount": 6, "currentFiles": [ "ABC.txt", "Whatcer.txt" ], "addedFiles": [ "ABC.txt" ], "deletedFiles": [ "Terracota.txt" ] } | Add a sample task object in DB for testing                                                                                                                     |
+
+
