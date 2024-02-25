@@ -13,6 +13,10 @@ Monitors configured directories at scheduled intervals, tracks file changes, cou
 **Dynamic Configuration** - Allows configuration of monitored directories, monitoring intervals, and magic strings via REST API calls. \
 **Task Run Details** - Provides detailed information about task runs, including start time, end time, total runtime, files added, files deleted, total magic string occurrences, and task status.
 
+## Database Schema Diagram
+![DB Schema](https://github.com/IamKarthickSelvam/DirWatcher/assets/102350733/6fb4b8fb-712b-4119-90cb-62661486a9dc) \
+**Note:** Considering the scope of this project and the nature of databases and tables used, there were no need for relationships between the two tables. 
+
 ## Code Setup
 ### 1. Install Prerequisites
 - .NET 8
@@ -72,5 +76,3 @@ Run the application using `dotnet run`
 | /ToggleCurrentTask     | PATCH  |{ "IsEnabled": boolean }                                        | `200 - Success` { "isEnabled": false }                                    | Start or Stop the current background task                                                                                                                     |
 | /ModifyConfig          | POST   |{ "Directory": "string", "Interval": int, "MagicString": "string" } | `200 - Success` { "Directory": "C:\\Stuff\\Coding\\DirWatcher\\TestDirectory", "Interval": 10, "MagicString": "abc" }                                           | Modify the current background task configuration to change task behaviour on the fly                                                                           |
 | /AddTask               | POST   |{ "taskNo": int, "startTime": "DateTime", "endTime": "DateTime", "status": "string", "totalRunTime": { "ticks": "seconds" }, "magicCount": int, "currentFiles": [ "string" ], "addedFiles": [ "string" ], "deletedFiles": [ "string" ] } | `201 - Created` { "taskNo": 55, "startTime": "2024-02-25T09:49:13.997Z", "endTime": "2024-02-26T09:49:13.997Z", "status": "In Progress", "totalRunTime": { "ticks": 10 }, "magicCount": 6, "currentFiles": [ "ABC.txt", "Whatcer.txt" ], "addedFiles": [ "ABC.txt" ], "deletedFiles": [ "Terracota.txt" ] } | Add a sample task object in DB for testing                                                                                                                     |
-
-
