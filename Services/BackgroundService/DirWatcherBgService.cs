@@ -39,36 +39,6 @@ namespace DirWatcher.Services
                 _stopwatch.Start();
         }
 
-        // Maybe use StartAsync
-        //public async Task Init()
-        //{
-        //    if (IsEnabled)
-        //        _stopwatch.Start();
-
-        //    await CreateTaskAsync();
-        //}
-
-        //public override async Task<object> StartAsync(CancellationToken cancellationToken)
-        //{
-        //    if (IsEnabled)
-        //        _stopwatch.Start();
-
-
-        //    _stoppingCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
-        //    // Store the task we're executing
-        //    _executeTask = ExecuteAsync(_stoppingCts.Token);
-
-        //    // If the task is completed then return it, this will bubble cancellation and failure to the caller
-        //    if (_executeTask.IsCompleted)
-        //    {
-        //        return _executeTask;
-        //    }
-
-        //    // Otherwise it's running
-        //    return Task.CompletedTask;
-        //}
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             using PeriodicTimer timer = new(_period);
@@ -95,7 +65,6 @@ namespace DirWatcher.Services
                             DeletedFiles = deletedFiles
                         };
 
-                        // USE REPOSITORY LOGIC HERE
                         string status = "In Progress";
                         UpdateTaskAsync(taskDetails, status);
 
@@ -105,7 +74,7 @@ namespace DirWatcher.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogInformation($"Failed to execute PeriodicBackgroundService with exception message {ex.Message}");
+                        _logger.LogInformation($"Failed to execute PeriodicBackgroundService with exception message: {ex.Message}");
                     }
                 }
             }
@@ -140,58 +109,26 @@ namespace DirWatcher.Services
             List<string> currentFiles = new(currentFilesArray);
 
             addedFiles = currentFilesArray.Except(_previousFiles).ToList();
-            //_addedFiles.AddRange(addedFiles);
 
             deletedFiles = _previousFiles.Except(currentFilesArray).ToList();
-            //_deletedFiles.AddRange(deletedFiles);
 
             _lastCheckTime = DateTime.Now;
-
-            //_previousFiles = currentFilesArray;
 
             foreach (string file in currentFiles)
             {
                 string content = File.ReadAllText(_directoryConfig.Result.Directory + "\\" + file);
                 var index = 0;
-                while ((index = content.IndexOf("awan", index)) != -1)
+                while ((index = content.IndexOf(_directoryConfig.Result.MagicString, index)) != -1)
                 {
-                    // Increment count and move index forward to search for next occurrence
                     magicCount++;
-                    index += "awan".Length;
+                    index += _directoryConfig.Result.MagicString.Length;
                 }
             }
 
             return (addedFiles, deletedFiles, currentFiles, magicCount);
-            //_logger.LogInformation($"count: {count}");
-            //await Console.Out.WriteLineAsync($"count: {count}");
-            //foreach (var currentFile in currentFiles)
-            //{
-            //    //_logger.LogInformation($"currentFiles: {currentFile}");
-            //    await Console.Out.WriteLineAsync($"currentFiles: {currentFile}");
-            //}
-            //foreach (var addedFile in addedFiles)
-            //{
-            //    //_logger.LogInformation($"addedFiles: {addedFile}");
-            //    await Console.Out.WriteLineAsync($"addedFiles 1: {addedFile}");
-            //}
-            //foreach (var _addedFile in _addedFiles)
-            //{
-            //    //_logger.LogInformation($"addedFiles: {_addedFile}");
-            //    await Console.Out.WriteLineAsync($"addedFiles 2: {_addedFile}");
-            //}
-            //foreach (var deletedFile in deletedFiles)
-            //{
-            //    //_logger.LogInformation($"deletedFiles: {deletedFile}");
-            //    await Console.Out.WriteLineAsync($"deletedFiles 1: {deletedFile}");
-            //}
-            //foreach (var _deletedFile in _deletedFiles)
-            //{
-            //    //_logger.LogInformation($"deletedFiles: {_deletedFile}");
-            //    await Console.Out.WriteLineAsync($"deletedFiles 2: {_deletedFile}");
-            //}
         }
 
-        public async Task UpdateConfig(BgConfig updatedBgConfig)
+        public void UpdateConfig(BgConfig updatedBgConfig)
         {
             _directoryConfig.Result.Directory = updatedBgConfig.Directory;
             _directoryConfig.Result.Interval = updatedBgConfig.Interval;

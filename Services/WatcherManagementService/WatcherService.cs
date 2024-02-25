@@ -26,16 +26,10 @@ namespace DirWatcher.Services.WatcherManagementService
 
         public async Task UpdateConfig(BgConfig updatedBgConfig)
         {
-            try
-            {
-                await _dirWatcherRepository.ModifyBgConfigAsync(updatedBgConfig);
-                await _dirWatcherRepository.SaveChangesAsync();
-                await _dirWatcherBgService.UpdateConfig(updatedBgConfig);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error occured : {ex.Message}");
-            }
+            await _dirWatcherRepository.ModifyBgConfigAsync(updatedBgConfig);
+            await _dirWatcherRepository.SaveChangesAsync();
+
+            await _dirWatcherBgService.UpdateConfig(updatedBgConfig);
         }
 
         public async Task AddTask(TaskDetail newTask)

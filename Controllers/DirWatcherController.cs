@@ -97,8 +97,8 @@ namespace DirWatcher.Controllers
             }
         }
 
-        [HttpPost(Name = "ModifyValues")]
-        public async Task<ActionResult> ModifyValues([FromBody] BgConfigDto bgConfigDto)
+        [HttpPost("ModifyConfig")]
+        public async Task<ActionResult> ModifyConfig([FromBody] BgConfigDto bgConfigDto)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace DirWatcher.Controllers
             }
             catch (Exception ex)
             {
-                await Console.Out.WriteLineAsync($"Error: {ex.Message} ");
+                await Console.Out.WriteLineAsync($"Error while trying to modify config: {ex.Message} ");
                 return StatusCode(500);
             }
         }
@@ -123,7 +123,7 @@ namespace DirWatcher.Controllers
                 var taskDetail = _mapper.Map<TaskDetail>(taskDetailDto);
                 await _watcherService.AddTask(taskDetail);
 
-                return StatusCode(200, taskDetail);
+                return StatusCode(201, taskDetail);
             }
             catch (Exception ex)
             {

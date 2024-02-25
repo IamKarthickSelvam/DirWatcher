@@ -6,6 +6,6 @@ namespace DirWatcher.Services
     {
         Task<TaskDetail> GetTaskDetailsAsync();
 
-        Task UpdateConfig(BgConfig updatedBgConfig);
+        void UpdateConfig(BgConfig updatedBgConfig);
     }
 }
