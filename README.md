@@ -1,4 +1,4 @@
-# DirWacher
+# DirWatcher
 DirWatcher is a .NET Core application designed to monitor directories for changes and provide real-time updates via a REST API. It consists of a REST API server and a long-running background task that continuously monitors specified directories.
 
 ## Main Components
